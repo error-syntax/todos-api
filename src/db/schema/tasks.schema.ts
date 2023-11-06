@@ -1,6 +1,6 @@
-import { boolean, date, integer, serial, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
-import { ListSchema } from "./lists.schema";
-import { mySchema } from ".";
+import { boolean, date, integer, serial, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
+import { ListSchema } from './lists.schema';
+import { mySchema } from './schema';
 
 export const TaskSchema = mySchema.table(
     'tasks',

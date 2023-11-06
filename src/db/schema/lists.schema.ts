@@ -1,6 +1,7 @@
-import { boolean, integer, serial, timestamp, varchar } from "drizzle-orm/pg-core";
-import { UserSchema } from "./users.schema";
-import { mySchema } from ".";
+import { boolean, integer, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
+
+import { UserSchema } from './users.schema';
+import { mySchema } from './schema';
 
 export const ListSchema = mySchema.table(
   'lists',

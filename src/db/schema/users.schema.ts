@@ -1,6 +1,5 @@
-import { sql } from "drizzle-orm";
-import { pgEnum, serial, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
-import { mySchema } from ".";
+import { pgEnum, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { mySchema } from './schema';
 
 export const roleEnum = pgEnum('role', ['super', 'admin', 'standard']);
  

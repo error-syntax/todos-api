@@ -1,3 +1,9 @@
-import { pgSchema } from "drizzle-orm/pg-core";
+import { UserSchema } from './users.schema';
+import { ListSchema } from './lists.schema';
+import { TaskSchema } from './tasks.schema';
 
-export const mySchema = pgSchema('todoist');
+export {
+  ListSchema,
+  TaskSchema,
+  UserSchema,
+}
