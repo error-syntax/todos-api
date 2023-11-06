@@ -8,6 +8,9 @@ const {
     POSTGRES_PASSWORD,
     POSTGRES_PORT,
     POSTGRES_USER,
+    REDIS_HOST,
+    REDIS_PORT,
+    REDIS_PASSWORD,
 } = process.env;
 
 export const envConfig = {
@@ -16,4 +19,7 @@ export const envConfig = {
     POSTGRES_PASSWORD,
     POSTGRES_PORT,
     POSTGRES_USER,
+    REDIS_HOST,
+    REDIS_PORT,
+    REDIS_PASSWORD,
 }
