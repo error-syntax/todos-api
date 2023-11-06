@@ -1,8 +1,11 @@
-import { eq } from "drizzle-orm";
-import { db } from "../db/db";
-import { UserSchema } from "../db/schema/users.schema";
-import { UserCreateInput } from "../types";
-import { UserUpdateInput } from "../types/users.types";
+import { eq } from 'drizzle-orm';
+import bcrypt from 'bcrypt';
+
+import { db } from '../db/db';
+import { UserSchema } from '../db/schema';
+import { UserCreateInput } from '../types';
+import { UserLoginInput, UserUpdateInput } from '../types/users.types';
+import BadRequestError from '../middlewares/errorHandlers/BadRequestHandler';
 
 export const getUsers = async () => {
     try {
@@ -27,25 +30,21 @@ export const getUserById = async (id: string) => {
 export const createUser = async (input: UserCreateInput) => {
     const { email, name, password } = input;
 
-    try {
-        const data = await db
-            .insert(UserSchema)
-            .values({
-                email,
-                password,
-                name,
-            })
-            .returning({
-                id: UserSchema.id,
-                name: UserSchema.name,
-                email: UserSchema.email,
-                role: UserSchema.role,
-            }); 
+    const data = await db
+        .insert(UserSchema)
+        .values({
+            email,
+            password,
+            name,
+        })
+        .returning({
+            id: UserSchema.id,
+            name: UserSchema.name,
+            email: UserSchema.email,
+            role: UserSchema.role,
+        }); 
 
-        return { data };
-    } catch (err) {
-       return { err }; 
-    }
+    return { data };
 }
 
 export const deleteUserById = async (id: string) => {
@@ -74,4 +73,26 @@ export const updateUserById = async (id: string, input: UserUpdateInput) => {
     } catch (err) {
         return { err };
     }
+}
+
+export const loginUser = async (input: UserLoginInput) => {
+    let passwordMatch = false;
+    const dbUser = await db.query.UserSchema.findFirst({
+        where: (users, { eq }) => eq(users.email, input.email.toLowerCase()),
+    });
+
+    if (!dbUser) throw new BadRequestError({ code: 404, message: 'Unable to authenticate with the provided email and password.', logging: false });
+    
+    passwordMatch = await bcrypt.compare(input.password, dbUser?.password);
+
+    if (!passwordMatch) throw new BadRequestError({ code: 404, message: 'Unable to authenticate with the provided email and password.', logging: false });
+
+    const {
+        id,
+        email,
+        name,
+        role,
+    } = dbUser;
+
+    return { id, email, name, role };
 }
