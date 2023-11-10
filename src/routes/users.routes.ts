@@ -3,8 +3,11 @@ import express from 'express';
 import * as UserService from '../services/users.service';
 import { UserCreateInput } from '../types';
 import { redisClient } from '../db/redis';
+import { isAuthenticated } from '../middlewares/authentication';
 
 const userRouter = express.Router();
+
+userRouter.use(isAuthenticated);
 
 userRouter.get('/', async (req, res, next) => {
   try {
@@ -85,11 +88,11 @@ userRouter.post('/login', async (req, res, next) => {
         sid: req.sessionID,
       };
 
-      res.set('Set-Cookie', `sid=${req.sessionID}`);
+      res.cookie('sid', req.sessionID, { path: '/' });
 
-      await redisClient.hSet(req.sessionID, { ...req.session.user });
+      await redisClient.hSet(`todoist:${req.sessionID}`, { ...req.session.user });
 
-      res.json('success');
+      res.json(response);
     }
   } catch (err) {
     next(err);
