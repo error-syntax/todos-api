@@ -7,7 +7,11 @@ import { isAuthenticated } from '../middlewares/authentication';
 
 const userRouter = express.Router();
 
-userRouter.use(isAuthenticated);
+userRouter.use(async (req, res, next) => {
+  isAuthenticated(req, res, next);
+
+  next();
+});
 
 userRouter.get('/', async (req, res, next) => {
   try {
@@ -58,8 +62,29 @@ userRouter.post('/create', async (req, res, next) => {
 
   try {
     const response = await UserService.createUser(input);
+    console.log(req.sessionID);
 
-    res.status(201).send(response);
+    const {
+      id,
+      email,
+      name,
+      role,
+    } = response[0];
+
+    req.session.authenticated = true
+    req.session.user = {
+      id,
+      email,
+      name,
+      role,
+      sid: req.sessionID,
+    };
+
+    res.cookie('sid', req.sessionID, { path: '/' });
+
+    await redisClient.hSet(`todoist:${req.sessionID}`, { ...req.session.user });
+
+    res.json(response[0]);
   } catch (err) {
     next(err);
   }

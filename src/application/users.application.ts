@@ -44,7 +44,7 @@ export const createUser = async (input: UserCreateInput) => {
             role: UserSchema.role,
         }); 
 
-    return { data };
+    return data;
 }
 
 export const deleteUserById = async (id: string) => {

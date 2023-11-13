@@ -1,14 +1,13 @@
-import { NextFunction, RequestHandler } from "express";
+import { RequestHandler } from "express";
 import { redisClient } from "../db/redis";
 
-const WHITELIST_PATHS = ['/login', '/create'];
 
-export const isAuthenticated: RequestHandler = async (req, res, next: NextFunction) => {
+export const isAuthenticated: RequestHandler = async (req, res) => {
   // Allow User login/create to bypass auth
-  if(WHITELIST_PATHS.includes(req.path)) {
+  if(req.path === '/login' || req.path === '/create') {
     console.log('No Authorization needed...');
 
-    next();
+    return;
   } else {
     const sessionId = req.headers.cookie?.split('=')[1] || '';
 
