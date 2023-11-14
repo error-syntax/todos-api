@@ -7,17 +7,13 @@ import { isAuthenticated } from '../middlewares/authentication';
 
 const userRouter = express.Router();
 
-userRouter.use(async (req, res, next) => {
-  isAuthenticated(req, res, next);
-
-  next();
-});
+userRouter.use(isAuthenticated);
 
 userRouter.get('/', async (req, res, next) => {
   try {
     const response = await UserService.getUsers();
 
-    res.send(response);
+    res.json(response);
   } catch (err) {
     next(err)
   }
@@ -27,7 +23,7 @@ userRouter.get('/:id', async (req, res, next) => {
   try {
     const response = await UserService.getUserById(req.params.id);
 
-    res.send({ data: response });
+    res.json(response);
   } catch (err) {
     next(err);
   }
@@ -39,7 +35,7 @@ userRouter.delete('/:id', async (req, res, next) => {
   try {
     const response = await UserService.deleteUserById(id);
 
-    res.send(response);
+    res.json(response);
   } catch (err) {
     next(err);
   }
@@ -51,7 +47,7 @@ userRouter.put('/:id', async (req, res, next) => {
   try {
     const response = await UserService.updateUserById(id, body);
 
-    res.send(response)
+    res.json(response)
   } catch (err) {
     next(err)
   }
