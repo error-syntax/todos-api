@@ -5,6 +5,8 @@ import userRouter from './routes/users.routes';
 import { errorHandler } from './middlewares/errors';
 import { appSession } from './middlewares/session';
 import authRouter from './routes/auth.routes';
+import listRouter from './routes/lists.routes';
+import tasksRouter from './routes/tasks.routes';
 
 const port = envConfig.API_PORT || 5000;
 const app = express();
@@ -21,12 +23,13 @@ app.get('/health', async (req, res) => {
 });
 
 app.use('/authorize', corsConfig, authRouter);
-
 app.use('/users', corsConfig, userRouter);
+app.use('/lists', corsConfig, listRouter);
+app.use('/tasks', corsConfig, tasksRouter);
 
 // ERROR HANDLER
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`Server is lit on port ${port}.`);
+  console.log(`Server is lit on http://localhost:${port}.`);
 });
