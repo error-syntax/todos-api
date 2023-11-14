@@ -4,9 +4,13 @@ import { isAuthenticated } from "../middlewares/authentication";
 const authRouter = express.Router();
 
 authRouter.post('/', async (req, res, next) => {
-  const response = await isAuthenticated(req, res, next);
+  try {
+    await isAuthenticated(req, res, next);
 
-  res.send(response);
+    res.send({ authenticated: req.session.authenticated, user: req.session.user });
+  } catch (err) {
+    next(err);
+  }
 })
 
 

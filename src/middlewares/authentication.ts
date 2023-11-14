@@ -2,21 +2,24 @@ import { RequestHandler } from "express";
 import { redisClient } from "../db/redis";
 
 
-export const isAuthenticated: RequestHandler = async (req, res) => {
+export const isAuthenticated: RequestHandler = async (req, res, next) => {
   // Allow User login/create to bypass auth
   if(req.path === '/login' || req.path === '/create') {
-    console.log('No Authorization needed...');
-
-    return;
+    next();
   } else {
     const sessionId = req.headers.cookie?.split('=')[1] || '';
 
     const userSession = await redisClient.get(`todoist:${sessionId}`); 
 
     if (!userSession) {
-      res.status(401).send('Unauthorized User');
+      next(new Error('Unauthorized User Session'));
     } else {
-      return userSession;
+      const sessionJSON = JSON.parse(userSession);
+
+      req.session.user = sessionJSON.user;
+      req.session.authenticated = sessionJSON.authenticated;
+
+      next();
     }
   };
 }
