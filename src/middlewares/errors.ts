@@ -17,6 +17,5 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
   }
 
   // Unhandled errors
-  console.error(err);
-  res.status(500).send({ errors: [err] });
+  res.status(500).send({ errors: [{ message: err.message, name: err.name, stack: err.stack }] });
 };
