@@ -1,5 +1,7 @@
 import { pgEnum, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { mySchema } from './schema';
+import { relations } from 'drizzle-orm';
+import { ListSchema } from './lists.schema';
 
 export const roleEnum = pgEnum('role', ['super', 'admin', 'standard']);
  
@@ -14,4 +16,11 @@ export const UserSchema = mySchema.table(
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull()
   }
+);
+
+export const userListsRelations = relations(
+  UserSchema,
+  ({ many }) => ({
+    ListSchema: many(ListSchema),
+  }),
 );
