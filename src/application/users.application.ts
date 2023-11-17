@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
 
 import { db } from '../db/db';
@@ -17,9 +17,12 @@ export const getUsers = async () => {
   }
 }
 
-export const getUserById = async (id: string) => {
+export const getUserById = async (userId: number) => {
   try {
-    const data = await db.select().from(UserSchema).where(eq(UserSchema.id, Number(id)));
+    const data = await db
+      .select()
+      .from(UserSchema)
+      .where(eq(UserSchema.id, userId));
 
     return { data };
   } catch (err) {
@@ -47,11 +50,11 @@ export const createUser = async (input: UserCreateInput) => {
   return data;
 }
 
-export const deleteUserById = async (id: string) => {
+export const deleteUserById = async (userId: number) => {
   try {
     const data = await db
       .delete(UserSchema)
-      .where(eq(UserSchema.id, Number(id)));
+      .where(eq(UserSchema.id, userId));
 
     return { data };
   } catch (err) {

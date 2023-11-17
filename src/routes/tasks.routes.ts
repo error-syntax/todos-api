@@ -13,9 +13,9 @@ tasksRouter.use(async (req, res, next) => {
 
 tasksRouter.get('/:listId', async (req, res, next) => {
   try {
-    const response = await TasksService.fetchTasksByListId(req.params.listId);
+    const data = await TasksService.fetchTasksByListId(req.params.listId);
 
-    res.json(response);
+    res.json(data);
   } catch (error) {
     next(error);
   }

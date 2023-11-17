@@ -9,7 +9,7 @@ export default class BadRequestError extends CustomError {
   constructor(params?: {code?: number, message?: string, logging?: boolean, context?: { [key: string]: any }}) {
     const { code, message, logging } = params || {};
     
-    super(message || "Bad request");
+    super(message || 'Bad request');
     this._code = code || BadRequestError._statusCode;
     this._logging = logging || false;
     this._context = params?.context || {};

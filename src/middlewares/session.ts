@@ -1,5 +1,5 @@
-import session from "express-session";
-import { redisStore } from "../db/redis";
+import session from 'express-session';
+import { redisStore } from '../db/redis';
 
 const MAX_AGE = 1000 * 60 * 60; // 1 hour
 

@@ -11,8 +11,8 @@ export const getUsers = async () => {
     return res;
 }
 
-export const getUserById = async (id: string) => {
-    const res = await UserApplication.getUserById(id);
+export const getUserById = async (userId: number)=> {
+    const res = await UserApplication.getUserById(userId);
 
     return res;
 }
@@ -31,10 +31,10 @@ export const createUser = async (input: UserCreateInput) => {
     return res;
 }
 
-export const deleteUserById = async (id: string) => {
-    if (!id) throw new BadRequestError({ code: 400, message: 'Bad request.', logging: false });
+export const deleteUserById = async (userId: number) => {
+    if (!userId) throw new BadRequestError({ code: 400, message: 'Bad request.', logging: false });
 
-    const res = await UserApplication.deleteUserById(id);
+    const res = await UserApplication.deleteUserById(userId);
 
     return res;
 }

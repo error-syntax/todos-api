@@ -1,5 +1,5 @@
-import { RequestHandler } from "express";
-import { redisClient } from "../db/redis";
+import { RequestHandler } from 'express';
+import { redisClient } from '../db/redis';
 
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {

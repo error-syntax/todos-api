@@ -11,9 +11,9 @@ userRouter.use(isAuthenticated);
 
 userRouter.get('/', async (req, res, next) => {
   try {
-    const response = await UserService.getUsers();
+    const data = await UserService.getUsers();
 
-    res.json(response);
+    res.json(data);
   } catch (err) {
     next(err)
   }
@@ -21,21 +21,19 @@ userRouter.get('/', async (req, res, next) => {
 
 userRouter.get('/:id', async (req, res, next) => {
   try {
-    const response = await UserService.getUserById(req.params.id);
+    const data = await UserService.getUserById(Number(req.params.id));
 
-    res.json(response);
+    res.json(data);
   } catch (err) {
     next(err);
   }
 });
 
 userRouter.delete('/:id', async (req, res, next) => {
-  const { params: { id } } = req;
-
   try {
-    const response = await UserService.deleteUserById(id);
+    const data = await UserService.deleteUserById(Number(req.params.id));
 
-    res.json(response);
+    res.json(data);
   } catch (err) {
     next(err);
   }
@@ -45,9 +43,9 @@ userRouter.put('/:id', async (req, res, next) => {
   const { params: { id }, body } = req;
 
   try {
-    const response = await UserService.updateUserById(id, body);
+    const data = await UserService.updateUserById(id, body);
 
-    res.json(response)
+    res.json(data)
   } catch (err) {
     next(err)
   }
@@ -57,7 +55,7 @@ userRouter.post('/create', async (req, res, next) => {
   const { body: input }: { body: UserCreateInput } = req;
 
   try {
-    const response = await UserService.createUser(input);
+    const data = await UserService.createUser(input);
     console.log(req.sessionID);
 
     const {
@@ -65,7 +63,7 @@ userRouter.post('/create', async (req, res, next) => {
       email,
       name,
       role,
-    } = response[0];
+    } = data[0];
 
     req.session.authenticated = true
     req.session.user = {
@@ -80,7 +78,7 @@ userRouter.post('/create', async (req, res, next) => {
 
     await redisClient.hSet(`todoist:${req.sessionID}`, { ...req.session.user });
 
-    res.json(response[0]);
+    res.json(data[0]);
   } catch (err) {
     next(err);
   }
@@ -88,7 +86,7 @@ userRouter.post('/create', async (req, res, next) => {
 
 userRouter.post('/login', async (req, res, next) => {
   try {
-    const response = await UserService.loginUser(req.body);
+    const data = await UserService.loginUser(req.body);
 
     if (req.session.authenticated) {
       res.json(req.session);
@@ -98,7 +96,7 @@ userRouter.post('/login', async (req, res, next) => {
         email,
         name,
         role,
-      } = response;
+      } = data;
 
       req.session.authenticated = true
       req.session.user = {
@@ -113,7 +111,7 @@ userRouter.post('/login', async (req, res, next) => {
 
       await redisClient.hSet(`todoist:${req.sessionID}`, { ...req.session.user });
 
-      res.json(response);
+      res.json(data);
     }
   } catch (err) {
     next(err);

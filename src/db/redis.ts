@@ -12,5 +12,5 @@ redisClient.connect().catch(console.error);
 // Initialize store.
 export const redisStore = new RedisStore({
   client: redisClient,
-  prefix: "todoist:",
+  prefix: 'todoist:',
 })
