@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const {
+    API_HOSTNAME,
     API_PORT,
     POSTGRES_DB,
     POSTGRES_PASSWORD,
@@ -14,6 +15,7 @@ const {
 } = process.env;
 
 export const envConfig = {
+    API_HOSTNAME,
     API_PORT,
     POSTGRES_DB,
     POSTGRES_PASSWORD,

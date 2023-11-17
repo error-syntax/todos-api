@@ -8,7 +8,8 @@ import authRouter from './routes/auth.routes';
 import listRouter from './routes/lists.routes';
 import tasksRouter from './routes/tasks.routes';
 
-const port = envConfig.API_PORT || 5000;
+const port = Number(envConfig.API_PORT) || 5000;
+const hostName = envConfig.API_HOSTNAME || 'localhost';
 const app = express();
 
 app.use(corsConfig);
@@ -30,6 +31,6 @@ app.use('/tasks', corsConfig, tasksRouter);
 // ERROR HANDLER
 app.use(errorHandler);
 
-app.listen(port, () => {
-  console.log(`Server is lit on http://localhost:${port}.`);
+app.listen(port, hostName, () => {
+  console.log(`Server is lit on http://${hostName}:${port}.`);
 });
