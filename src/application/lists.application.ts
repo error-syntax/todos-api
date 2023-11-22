@@ -6,6 +6,7 @@ import { ListCreateInput, ListUpdateInput } from '../types';
 export const fetchListByUserId = async (userId: number) => {
   const data = await db.query.ListSchema.findMany({
     where: eq(ListSchema.ownerId, userId),
+    orderBy: ListSchema.id,
   });
 
   return data;
@@ -48,7 +49,10 @@ export const updateList = async (input: Required<ListUpdateInput>) => {
     })
     .where(eq(ListSchema.id, input.id))
     .returning({
+      archived: ListSchema.archived,
       id: ListSchema.id,
-    })
-    
+      name: ListSchema.name,
+    });
+
+    return data;
 }
