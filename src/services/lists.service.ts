@@ -4,12 +4,12 @@ import { ListCreateInput, ListUpdateInput } from '../types';
 import validate from './validation';
 
 const ListCreateSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1).max(150),
   ownerId: z.number(),
 });
 
 const ListUpdateSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1).max(150),
   id: z.number(),
 })
 
@@ -38,4 +38,5 @@ export const updateList = async (input: ListUpdateInput) => {
 
   const data = await ListsApplication.updateList(input);
 
+  return data;
 }

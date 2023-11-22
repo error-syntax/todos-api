@@ -56,7 +56,6 @@ userRouter.post('/create', async (req, res, next) => {
 
   try {
     const data = await UserService.createUser(input);
-    console.log(req.sessionID);
 
     const {
       id,
