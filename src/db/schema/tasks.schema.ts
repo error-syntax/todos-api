@@ -7,15 +7,16 @@ export const TaskSchema = mySchema.table(
     {
         id: serial('id').primaryKey(),
         listId: integer('list_id').references(() => ListSchema.id).notNull(),
-        content: varchar('content', { length: 255 }).notNull(),
+        archived: boolean('archived').default(false).notNull(),
         completed: boolean('completed').default(false).notNull(),
         dueDate: date('due_date'),
+        name: varchar('name', { length: 255 }).notNull(),
         createdAt: timestamp('created_at').defaultNow().notNull(),
         updatedAt: timestamp('updated_at').defaultNow().notNull()
     },
     (taskSchema) => {
         return {
-            list_content_unique_idx: uniqueIndex('list_content_unique_idx').on(taskSchema.listId, taskSchema.content),
+            list_content_unique_idx: uniqueIndex('list_content_unique_idx').on(taskSchema.listId, taskSchema.name),
         }
     }
 )
