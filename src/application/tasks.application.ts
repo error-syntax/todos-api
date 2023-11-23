@@ -16,6 +16,7 @@ export const archiveTask = async (taskId: number) => {
   const data = await db
     .update(TaskSchema)
     .set({ archived: true })
+    .where(eq(TaskSchema.id, taskId))
     .returning({
       id: TaskSchema.id,
       completed: TaskSchema.completed,
@@ -48,7 +49,7 @@ export const createTask = async (input: TaskCreateInput) => {
 
 export const deleteTask = async (taskId: number) => {
   const data = await db.delete(TaskSchema).where(eq(TaskSchema.id, taskId)).returning({
-    deletedTaskId: TaskSchema.id,
+    id: TaskSchema.id,
   });
 
   return {
