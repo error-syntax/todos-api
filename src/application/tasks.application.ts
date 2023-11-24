@@ -59,16 +59,14 @@ export const deleteTask = async (taskId: number) => {
 };
 
 export const updateTask = async (input: TaskUpdateInput) => {
+  const { id, ...rest } = input;
   const data = await db
     .update(TaskSchema)
     .set({
-      completed: input.completed,
-      dueDate: input.dueDate,
-      listId: Number(input.listId),
-      name: input.name,
+      ...rest,
       updatedAt: new Date(),
     })
-    .where(eq(TaskSchema.id, Number(input.id)))
+    .where(eq(TaskSchema.id, id))
     .returning({
       id: TaskSchema.id,
       completed: TaskSchema.completed,
